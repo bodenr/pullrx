@@ -52,8 +52,14 @@ def org_repos_with_prs(org_name):
 
 def print_org_repos_summary(org_name):
     repo_store = org_repos_with_prs(org_name)
+    org_prs = collections.collect_dict_keys(['pull_requests'], *repo_store.values())
     print("Pull Request summary for %s organization" % org_name)
     print("%s total repos" % len(repo_store.keys()))
+    print("%s total PRs (open+closed)" % len(org_prs))
+    print("%s total open PRs" % collections.sum_list(org_prs, lambda pr: pr['state'] == 'open'))
+    print("%s total closed PRs" % collections.sum_list(org_prs, lambda pr: pr['state'] == 'closed'))
+    print("%s total draft PRs" % collections.sum_list(org_prs, lambda pr: pr['draft'] is True))
+    print("\nBreakdown by repo")
     print("------------------------")
     for repo_name, data in repo_store.items():
         pr_list = data['pull_requests']
