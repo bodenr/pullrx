@@ -21,6 +21,19 @@ def sum_list(list_to_sum, predicate):
     return len(reduce_list(list_to_sum, predicate))
 
 
+def collect_dict_keys(keys, *dicts, require_keys=True, flatten=True):
+    collected = []
+    for d in dicts:
+        for key in keys:
+            value = d[key] if require_keys else d.get(key)
+            if value is not None:
+                val_type = type(value)
+                if flatten and val_type in [list, set]:
+                    collected.extend(value)
+                else:
+                    collected.append(value)
+    return collected
+
 def filter_dict(dict_to_filer, predicate):
     filtered = {}
     for k, v in dict_to_filer:
