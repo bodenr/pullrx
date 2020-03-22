@@ -30,3 +30,5 @@ def credentials_from_file_store(hostname, cred_file_path=DEFAULT_CRED_FILE, prot
                 if cred_host == hostname:
                     return Credentials(hostname, user_pass.split(':')[0],
                                        user_pass.split(':')[1], protocol=protocol)
+
+    raise PermissionError("No credentials found for %s//%s" % (protocol, hostname))

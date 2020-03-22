@@ -39,7 +39,7 @@ class GithubClient(object):
     # https://developer.github.com/v3/
 
     def __init__(self, request_context=None):
-        self._context = request_context or RequestContext()
+        self._context = request_context or default_context()
 
     def _get(self, url, request_context, params=None):
         response = requests.get(url, params=params,
