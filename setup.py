@@ -11,6 +11,6 @@ setup(
     license='MIT',
     author='boden',
     author_email='bodenru@gmail.com',
-    description='PoC grade analyzing github PRs in Python',
+    description='Analyzing github PRs with PoC-grade Python code',
     install_requires=requirements
 )
