@@ -28,7 +28,7 @@ def org_repos(org_name):
     repo_client = client.RepoClient(request_context=client.default_context())
     repos = repo_client.list_for_org(org_name)
     store = mem.MemoryStore(org_name + '/repos')
-    store.update_from_array(repos, 'name')
+    store.update_from_list(repos, 'name')
     return store
 
 

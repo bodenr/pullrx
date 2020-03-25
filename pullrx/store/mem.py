@@ -6,6 +6,7 @@ META_DELIM = '__'
 
 class MemoryStore(object):
     # a dict like struct that maintains separate metadata about its contents
+    # TODO: make store an interface
 
     def __init__(self, identifier):
         self._store = {}
@@ -16,35 +17,33 @@ class MemoryStore(object):
     def identifier(self):
         return self.get_meta('id')
 
-    def keys(self, include_meta=False):
+    def _to_dict(self, include_meta=False):
         if not include_meta:
-            return self._store.keys()
+            return self._store
         d = self._meta.copy()
         d.update(self._store)
-        return d.keys()
+        return d
+
+    def keys(self, include_meta=False):
+        return self._to_dict(include_meta=include_meta).keys()
 
     def values(self, include_meta=False):
-        if not include_meta:
-            return self._store.values()
-        d = self._meta.copy()
-        d.update(self._store)
-        return d.values()
+        return self._to_dict(include_meta=include_meta).values()
 
     def items(self, include_meta=False):
-        if not include_meta:
-            return self._store.items()
-        d = self._meta.copy()
-        d.update(self._store)
-        return d.items()
+        return self._to_dict(include_meta=include_meta).items()
 
-    def update_from_array(self, array_of_dicts, dict_key):
-        for d in array_of_dicts:
+    def update_from_list(self, list_of_dicts, dict_key):
+        for d in list_of_dicts:
             self._store[d[dict_key]] = d
 
     def update(self, other_store, include_meta=False):
-        self._store.update(other_store._store)
-        if include_meta:
-            self._meta.update(other_store._meta)
+        if isinstance(other_store, MemoryStore):
+            self._store.update(other_store._store)
+            if include_meta:
+                self._meta.update(other_store._meta)
+        else:
+            self._store.update(other_store)
 
     @staticmethod
     def to_meta_key(key):
@@ -102,7 +101,8 @@ class MemoryStore(object):
 
     @staticmethod
     def keyed_paths(key_path):
-        # a path of keys separate by ':'
+        # a path of keys separated by ':'
+        # TODO: support : in key names using single quotes
         return key_path.split(':')
 
     @staticmethod
