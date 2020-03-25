@@ -34,6 +34,7 @@ def collect_dict_keys(keys, *dicts, require_keys=True, flatten=True):
                     collected.append(value)
     return collected
 
+
 def filter_dict(dict_to_filer, predicate):
     filtered = {}
     for k, v in dict_to_filer:
